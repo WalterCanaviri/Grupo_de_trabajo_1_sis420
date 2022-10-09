@@ -1,5 +1,41 @@
-#Nombre: laberinto2_v2
+#Lista de Integrantes:
+#
+# 1. Walter Freddy Canaviri Parraga
+#    Ing. de Sistemas
+#
+# 2. Choque Cruz Flavio Denylson
+#    Ing. de Sistemas
+#
+# 3. Santillan Jason
+#    Ing. en Ciencias de la Computación
+#
+# 4. Rosario Cruz Rodrigo
+#    Ing. en Ciencias de la Computación
+#
+# 5. Adriana Jasiel Campos Romero
+#    Ing. en Ciencias de la Computación
+#
+# 6. Rodrigo Walter Andre Basilio
+#    Ing. en Ciencias de la Computación
+#
+# Los que hace es primero generar un laberinto y se genera un punto para iniciar, despues MAPEA el lugar (arriba, abajo, derecha, izquierda)
+# y si hay mas de un camino, se guarda en una lista como PUNTO DE DIFURCACION despues se mueve a un camino y lleaga al final, despues al llegar
+# a un camino sin salida, vuelve al ultimo PUNDO DE DIFURCACION y va al camino que no curso y hace eso hasyta que ya no haya PUNTOS DE DIFURCACION
+# Y despues se generan los puntos (Comida) y se compara los puntos_cominda con los posibles camino y elije el que tiene menor distancia
+# y se mueve hacua alli, despues hace un nuevo MAPEO y se repite todo otra vez hasta que ya no haya COMIDAs en el mapa (laberinto)
 import random
+
+def Imprimir_laberinto(laberinto, alto, ancho, camino, vacio):
+    for i in range(0, alto):
+        for j in range(0, ancho):
+            if (laberinto[i][j] == vacio):
+                print(str(laberinto[i][j]), end=" ")
+            elif (laberinto[i][j] == camino):
+                print(str(laberinto[i][j]), end=" ")
+            else:
+                print(str(laberinto[i][j]), end=" ")
+        print('\n')
+
 def buscar_dato(dato_y, dato_x,LC,List_total_caminos):
     for total in List_total_caminos:
         aux_1=total
@@ -10,43 +46,27 @@ def buscar_dato(dato_y, dato_x,LC,List_total_caminos):
         if (total_camino == [dato_y,dato_x]):
             return 1
     return 0
-#Nos dice los caminos sin explorar que hay
-def mapeo_de_caminos(Posicion_Actual,LC,List_total_caminos):
+
+def mapeo_de_caminos(Posicion_Actual,LC,List_total_caminos, camino, comida):
     s_caminos = 0
     caminos_libres = []
-    if ((laberinto[Posicion_Actual[0]-1][Posicion_Actual[1]] == camino or laberinto[Posicion_Actual[0]-1][Posicion_Actual[1]] == comida) and buscar_dato(Posicion_Actual[0]-1 , Posicion_Actual[1],LC,List_total_caminos) == 0):
+    if ((laberinto[Posicion_Actual[0]-1][Posicion_Actual[1]] == camino or laberinto[Posicion_Actual[0]-1][Posicion_Actual[1]] == comida or laberinto[Posicion_Actual[0]-1][Posicion_Actual[1]] == "A") and buscar_dato(Posicion_Actual[0]-1 , Posicion_Actual[1],LC,List_total_caminos) == 0):
         s_caminos += 1
         caminos_libres.append([Posicion_Actual[0]-1 , Posicion_Actual[1]])
-    if ((laberinto[Posicion_Actual[0]+1][Posicion_Actual[1]] == camino or laberinto[Posicion_Actual[0]+1][Posicion_Actual[1]] == comida) and buscar_dato(Posicion_Actual[0]+1 , Posicion_Actual[1],LC,List_total_caminos) == 0):
+    if ((laberinto[Posicion_Actual[0]+1][Posicion_Actual[1]] == camino or laberinto[Posicion_Actual[0]+1][Posicion_Actual[1]] == comida or laberinto[Posicion_Actual[0]-1][Posicion_Actual[1]] == "A") and buscar_dato(Posicion_Actual[0]+1 , Posicion_Actual[1],LC,List_total_caminos) == 0):
         s_caminos += 1
         caminos_libres.append([Posicion_Actual[0]+1 , Posicion_Actual[1]])
-    if ((laberinto[Posicion_Actual[0]][Posicion_Actual[1]-1] == camino or laberinto[Posicion_Actual[0]][Posicion_Actual[1]-1] == comida) and buscar_dato(Posicion_Actual[0] , Posicion_Actual[1]-1,LC,List_total_caminos) == 0):
+    if ((laberinto[Posicion_Actual[0]][Posicion_Actual[1]-1] == camino or laberinto[Posicion_Actual[0]][Posicion_Actual[1]-1] == comida or laberinto[Posicion_Actual[0]-1][Posicion_Actual[1]] == "A") and buscar_dato(Posicion_Actual[0] , Posicion_Actual[1]-1,LC,List_total_caminos) == 0):
         s_caminos +=1
         caminos_libres.append([Posicion_Actual[0] , Posicion_Actual[1]-1])
-    if ((laberinto[Posicion_Actual[0]][Posicion_Actual[1]+1] == camino or laberinto[Posicion_Actual[0]][Posicion_Actual[1]+1] == comida) and buscar_dato(Posicion_Actual[0] , Posicion_Actual[1]+1,LC,List_total_caminos) == 0):
+    if ((laberinto[Posicion_Actual[0]][Posicion_Actual[1]+1] == camino or laberinto[Posicion_Actual[0]][Posicion_Actual[1]+1] == comida or laberinto[Posicion_Actual[0]-1][Posicion_Actual[1]] == "A") and buscar_dato(Posicion_Actual[0] , Posicion_Actual[1]+1,LC,List_total_caminos) == 0):
         s_caminos += 1
         caminos_libres.append([Posicion_Actual[0] , Posicion_Actual[1]+1])
     return s_caminos, caminos_libres
 
-def Prueva():
-    for lab in laberinto:
-        print(lab)
-    for lab in List_total_caminos:
-        for dato in lab:
-            a,b = dato
-            laberinto[a][b]="W"
-    print("-----")
-    for lab in laberinto:
-        print(lab)
-
-def Prueva_2(List_total_caminos):
-    for lab in List_total_caminos:
-        print(lab)
-    print("----------------")
-
-def Mapeo_de_laberinto(PA,PD,LC, List_total_caminos):
-    if PA[0] != 0 and (laberinto[PA[0]][PA[1]] == camino or laberinto[PA[0]][PA[1]] == comida):
-        aux_1, aux_2 = mapeo_de_caminos(PA,LC,List_total_caminos)
+def Mapeo_de_laberinto(PA,PD,LC, List_total_caminos, comida, camino):
+    if PA[0] != 0 and (laberinto[PA[0]][PA[1]] == camino or laberinto[PA[0]][PA[1]] == comida or laberinto[PA[0]][PA[1]] == "A"):
+        aux_1, aux_2 = mapeo_de_caminos(PA,LC,List_total_caminos, camino, comida)
         if aux_1 == 0:
             LC.append(PA)
             List_total_caminos.append(LC)
@@ -61,7 +81,7 @@ def Mapeo_de_laberinto(PA,PD,LC, List_total_caminos):
                 LC=[]
                 aux_3 = PD[len(PD)-1]
                 PD.remove(aux_3)
-                return Mapeo_de_laberinto(aux_3,PD,List_nuevo_camino, List_total_caminos)
+                return Mapeo_de_laberinto(aux_3,PD,List_nuevo_camino, List_total_caminos, comida, camino)
             else:
                 print("FIN")
                 return List_total_caminos #--------------------------------------------------------------------------------------
@@ -69,18 +89,18 @@ def Mapeo_de_laberinto(PA,PD,LC, List_total_caminos):
             PD.append(PA)
             LC.append(PA)
             PA = aux_2[0]
-            return Mapeo_de_laberinto(PA,PD,LC, List_total_caminos)
+            return Mapeo_de_laberinto(PA,PD,LC, List_total_caminos, comida, camino)
         if aux_1 == 1:
             LC.append(PA)
             PA = aux_2[0]
             for dato in PD:
                 if dato == PA:
                     PD.remove(PA)
-            return Mapeo_de_laberinto(PA,PD,LC, List_total_caminos)
+            return Mapeo_de_laberinto(PA,PD,LC, List_total_caminos, comida, camino)
     else:
         print("MAL")
 
-def Generar_comida(numero_de_comida,Posicion_Actual):
+def Generar_comida(numero_de_comida,Posicion_Actual, List_total_caminos, comida):
     contador = 0
     for lab in laberinto:
         for dato in lab:
@@ -93,12 +113,10 @@ def Generar_comida(numero_de_comida,Posicion_Actual):
     posicion_de_comida = []
     contador_2 = 0
     Aux_1 = []
-    aux_2 = 1
-    #print("Entrando al WHILE ")
     while(contador_2 < numero_de_comida):
-        #Modificar para que no aparezca el primer punto
         Aux_1 = Posiciones_de_caminos[random.randint(2, contador)]
         if (contador_2 > 0):
+            aux_2=1
             for t in posicion_de_comida:
                 if(Aux_1 == Posicion_Actual or Aux_1 == t):
                     aux_2 = 0
@@ -120,7 +138,7 @@ def imprimir_array(abc):
         print(fg)
     print("-----------------------------------------")
 
-def Elegir_camino(CM, Pos_Act, List_total_caminos):
+def Elegir_camino(CM, Pos_Act, List_total_caminos, comida, camino):
     list_opciones = []
     Opciones = []
     Camino_Optimo = []
@@ -153,7 +171,6 @@ def Elegir_camino(CM, Pos_Act, List_total_caminos):
         list_opciones = []
     Distancia_a_caminar = 10000 #NUMERO ALTO --------------------------------
     for CO in Camino_Optimo:
-        #indice = indice + 1
         if CO < Distancia_a_caminar:
             Distancia_a_caminar = CO
     aux_2 = -1
@@ -176,20 +193,29 @@ def Elegir_camino(CM, Pos_Act, List_total_caminos):
     aux_4 = []
     aux_4 = CM[indice_cm]
     CM.remove(CM[indice_cm])
-    #IMPRIME LA RUTA QUE TEIENE QUE RECORRER PARA COMER LA COMIDA
-    #imprimir_array(List_total_caminos)
-    #print(List_total_caminos[Opciones[indice_cm][0]-1])
     print("Ubicacion de la comida = ",aux_4)
+    print("-----------------")
+    print("Lsta total de caminos ", len(List_total_caminos))
+    for lab in List_total_caminos:
+        print(lab)
+    print("-----------------")
+    print("lista de camino optimo",list_camino_optimo)
+    print("-----------------")
+    print("Indice ? ",indice)
+    print("-----------------")
+    print("camino optimo seleccionado ",list_camino_optimo[indice][0]-1)
+    print("-----------------")
+    print("Lista total de caminos seleccionado ",List_total_caminos[list_camino_optimo[indice][0]-1])
+    print("-----------------")
     print("Los pasos que hacer para llegar al objetivo (comida)")
-    if (len(List_total_caminos[list_camino_optimo[indice][0]]) >1) :
-        #List_total_caminos[Opciones[indice_cm][0]]
+    if (len(List_total_caminos[list_camino_optimo[indice][0]-1]) >0) :
         for agh in List_total_caminos[Opciones[indice_cm][0]-1]:
             if (agh != aux_4):
                 print(agh)#Indica la posicion en la que avanzar (o mas bien el punto) para llegar a su objetivo
-                laberinto[agh[0]][agh[1]] = "A"#Se marca el camino que hace el agente en el laberinto
+                laberinto[agh[0]][agh[1]] = "c"#Se marca el camino que hace el agente en el laberinto
             else:
                 print(agh)
-                laberinto[agh[0]][agh[1]] = "A"
+                laberinto[agh[0]][agh[1]] = "c"
                 break
     
     if(len(CM)> 0):
@@ -200,57 +226,37 @@ def Elegir_camino(CM, Pos_Act, List_total_caminos):
         list_opciones = []
         List_total_caminos = []
         List_camino = []
-        List_total_caminos = Mapeo_de_laberinto(aux_4, Punto_de_difurcacion,List_camino, List_total_caminos)
+        List_total_caminos = Mapeo_de_laberinto(aux_4, Punto_de_difurcacion,List_camino, List_total_caminos, comida, camino)
         print("__________________________________________________________________")
-        return Elegir_camino(CM, aux_4, List_total_caminos)
+        return Elegir_camino(CM, aux_4, List_total_caminos, comida, camino)
     else:
-        laberinto[aux_4[0]][aux_4[1]] = "c"
+        laberinto[aux_4[0]][aux_4[1]] = "c"#Es A pporque se movio y comio, puede ser c si se quire
         print("Encontrado ... ")
         imprimir_array(laberinto)
         print("__________________________________________________________________")
         print("FIN DEL CAMINO")
 
-def definir_punto_de_inicio(al,anc,lab):
-    estado = 0
-    while (estado==0):
-        aux_1 = random.randint(1, al)
-        aux_2 = random.randint(1, anc)
-        if lab[aux_1][aux_2] == comida:
-            estado == 1
-    return aux_1,aux_2
-    
+def Buscar_Comida (pared, camino, comida):
+    List_total_caminos = []
+    List_camino = []
+    Punto_de_difurcacion = []
+    List_Comida = []
+    List_Opciones = []
+    imprimir_array(laberinto)
+    Mapeo_de_laberinto(Posicion_actual, Punto_de_difurcacion,List_camino, List_total_caminos, comida, camino)
+    List_Comida = Generar_comida(3,Posicion_actual, List_total_caminos, comida)
+    # List_Comida = [[3,4],[5,4],[3,2]]
+    # laberinto[3][4]=comida
+    # laberinto[5][4]=comida
+    # laberinto[3][2]=comida
+    print("Imprimir la ubicacion de las comidas")
+    print(List_Comida)
+    imprimir_array(laberinto)
+    Elegir_camino(List_Comida, Posicion_actual, List_total_caminos, comida, camino)
+    print("YA TERMINO TODO")
 
-laberinto = [['#', '#', '#', '#', '#', '#', '#', '#']
-            ,['#', '#', 'c', 'c', 'c', 'c', 'c', '#']     
-            ,['#', 'c', 'c', '#', '#', '#', '#', '#']     
-            ,['#', '#', 'c', 'c', 'c', 'c', 'c', '#']     
-            ,['#', 'c', 'c', '#', 'c', '#', '#', '#']     
-            ,['#', 'c', '#', '#', 'c', 'c', 'c', '#']     
-            ,['#', '#', '#', '#', '#', '#', '#', '#']]
-alto = 7
-ancho = 8
-#y, x = 0, 2
-camino = "c"
-pared = "#"
-#vacio = "v"
-comida = "O"
-Posicion_actual=[1,2]#Inician desde este punto de inicio
-List_total_caminos = []
-List_camino = []
-Punto_de_difurcacion = []
-List_Comida = []
-List_Opciones = []
-#a,b = definir_punto_de_inicio(alto-1,ancho-1,laberinto)
-#print ("punto de inicio opcional = ",a," ",b)
-imprimir_array(laberinto)
-Mapeo_de_laberinto(Posicion_actual, Punto_de_difurcacion,List_camino, List_total_caminos)
-#List_Comida = Generar_comida(3,Posicion_actual)
-List_Comida = [[3,4],[5,4],[3,2]]
-laberinto[3][4]=comida
-laberinto[5][4]=comida
-laberinto[3][2]=comida
-print("Imprimir la ubicacion de las comidas")
-print(List_Comida)
-imprimir_array(laberinto)
-Elegir_camino(List_Comida, Posicion_actual, List_total_caminos)
-print("YA TERMINO TODO")
+
+import Crear_Laberinto as lb
+#alto = 7 , ancho = 8
+laberinto, Posicion_actual = lb.generar_laberinto(7, 8, "#", "c", "v")
+Buscar_Comida("#", "c", "O")
